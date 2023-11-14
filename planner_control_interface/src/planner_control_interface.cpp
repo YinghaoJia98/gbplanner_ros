@@ -316,7 +316,8 @@ bool PlannerControlInterface::stopPlannerCallback(
   planner_set_trigger_mode_client_.call(planning_mode_srv);
 
   res.success = true;
-  ROS_WARN_COND(global_verbosity >= Verbosity::PLANNER_STATUS, "[PCI] STOP PLANNER.");
+  ROS_WARN_COND(global_verbosity >= Verbosity::PLANNER_STATUS,
+                "[PCI] STOP PLANNER.");
   return true;
 }
 
@@ -511,7 +512,8 @@ bool PlannerControlInterface::init() {
   // For example: checking odometry is ready.
   ros::Rate rr(1);
   while (!pose_is_ready_) {
-    ROS_WARN_COND(global_verbosity >= Verbosity::DEBUG, "Waiting for odometry.");
+    ROS_WARN_COND(global_verbosity >= Verbosity::DEBUG,
+                  "Waiting for odometry.");
     ros::spinOnce();
     rr.sleep();
   }
@@ -600,8 +602,8 @@ void PlannerControlInterface::run() {
 }
 
 void PlannerControlInterface::runGlobalRepositioning() {
-  ROS_INFO_COND(global_verbosity >= Verbosity::PLANNER_STATUS, "Global Repositioning %i",
-                planner_iteration_);
+  ROS_INFO_COND(global_verbosity >= Verbosity::PLANNER_STATUS,
+                "Global Repositioning %i", planner_iteration_);
 
   planner_msgs::planner_set_planning_mode planning_mode_srv;
   planning_mode_srv.request.planning_mode =
@@ -658,8 +660,8 @@ void PlannerControlInterface::runPassingGate() {
 }
 
 void PlannerControlInterface::runGlobalPlanner(bool exe_path = false) {
-  ROS_INFO_COND(global_verbosity >= Verbosity::PLANNER_STATUS, "Planning iteration %i",
-                planner_iteration_);
+  ROS_INFO_COND(global_verbosity >= Verbosity::PLANNER_STATUS,
+                "Planning iteration %i", planner_iteration_);
 
   planner_msgs::planner_set_planning_mode planning_mode_srv;
   planning_mode_srv.request.planning_mode =
@@ -710,8 +712,8 @@ void PlannerControlInterface::runPlanner(bool exe_path = false) {
     if (stop_planner_request_) return;
 
     bound_mode_ = ind;
-    ROS_INFO_COND(global_verbosity >= Verbosity::PLANNER_STATUS, "Planning iteration %i",
-                  planner_iteration_);
+    ROS_INFO_COND(global_verbosity >= Verbosity::PLANNER_STATUS,
+                  "Planning iteration %i", planner_iteration_);
     planner_msgs::planner_srv plan_srv;
     plan_srv.request.header.stamp = ros::Time::now();
     plan_srv.request.header.seq = planner_iteration_;
@@ -755,13 +757,15 @@ void PlannerControlInterface::runPlanner(bool exe_path = false) {
         }
       } else {
         publishPlannerStatus(plan_srv.response, false);
-        ROS_WARN_COND(global_verbosity >= Verbosity::WARN, "Planner returned an empty path");
+        ROS_WARN_COND(global_verbosity >= Verbosity::WARN,
+                      "Planner returned an empty path");
         ros::Duration(0.5).sleep();
       }
       planner_iteration_++;
       if (success) break;
     } else {
-      ROS_ERROR_COND(global_verbosity >= Verbosity::ERROR, "Planner service failed");
+      ROS_ERROR_COND(global_verbosity >= Verbosity::ERROR,
+                     "Planner service failed");
       ros::Duration(0.5).sleep();
     }
   }
@@ -798,7 +802,8 @@ void PlannerControlInterface::publishGoToWaypointVisualization(
 }
 
 void PlannerControlInterface::runHoming(bool exe_path) {
-  ROS_WARN_COND(global_verbosity >= Verbosity::PLANNER_STATUS, "Start homing ...");
+  ROS_WARN_COND(global_verbosity >= Verbosity::PLANNER_STATUS,
+                "Start homing ...");
   planner_msgs::planner_set_planning_mode planning_mode_srv;
   planning_mode_srv.request.planning_mode =
       planner_msgs::planner_set_planning_mode::Request::kManual;
